@@ -55,6 +55,7 @@ stats = neat.StatisticsReporter()
 p.add_reporter(stats)
 p.add_reporter(neat.Checkpointer(5))
 
+#p = neat.Checkpointer.restore_checkpoint('neat-checkpoint-164')
 
 # Run until a solution is found.
 winner = p.run(eval_genomes)
@@ -71,4 +72,3 @@ visualize.draw_net(config, winner, True)
 visualize.plot_stats(stats, ylog=False, view=True)
 visualize.plot_species(stats, view=True)
 
-p = neat.Checkpointer.restore_checkpoint('checkpoint')
