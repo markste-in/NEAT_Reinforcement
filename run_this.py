@@ -1,6 +1,4 @@
-"""
-2-input XOR example -- this is most likely the simplest possible example.
-"""
+#derived from the neat-python example
 
 from __future__ import print_function
 import neat
