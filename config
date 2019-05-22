@@ -1,5 +1,3 @@
-# neat-python configuration for the LunarLander-v2 environment on OpenAI Gym
-
 [NEAT]
 pop_size              = 150
 # Note: the fitness threshold will never be reached because
