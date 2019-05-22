@@ -1,4 +1,5 @@
 [terminal]: pics/terminal.png
+[570gens]: pics/570gens.png
 
 # NEAT Reinforcement Learning with OpenAI Gym
 Testing the implementation of the NEAT algorithm (NeuroEvolution of Augmenting Topologies) on some [OpenAI gym](https://gym.openai.com/) environments
@@ -10,3 +11,7 @@ Can be run by simply typing
 python run_this.py
 ```
 ![run in terminal][terminal]
+
+
+After 570 generations
+![570 generations later][570gens]
