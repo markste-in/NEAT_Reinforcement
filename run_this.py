@@ -5,9 +5,10 @@ import neat
 import gym
 import numpy as np
 import visualize
+import os
 
 
-env = gym.make('BipedalWalker-v2')
+env = gym.make('BipedalWalkerHardcore-v2')
 #env = gym.make('CartPole-v1')
 
 def pick_action(obs, net):
@@ -27,46 +28,57 @@ def run_env(net, render=False):
         sum_reward+=reward
         if done:
             break
-
+    assert type(sum_reward) is not type(None), "Something bad happened"
     return sum_reward
 
 
 
-def eval_genomes(genomes, config):
-    for genome_id, genome in genomes:
-        net = neat.nn.FeedForwardNetwork.create(genome, config)
-        avg_reward = [run_env(net) for i in range(3)]
-        genome.fitness = np.average(avg_reward)
+def eval_genome(genome, config):
+
+    net = neat.nn.FeedForwardNetwork.create(genome, config)
+    avg_reward = [run_env(net) for i in range(3)]
+    return np.average(avg_reward)
 
 
-# Load configuration.
-config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
+
+def run (config_file):
+    # Load configuration.
+    config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
                      neat.DefaultSpeciesSet, neat.DefaultStagnation,
-                     'config')
+                     config_file)
 
-# Create the population, which is the top-level object for a NEAT run.
-p = neat.Population(config)
+    # Create the population, which is the top-level object for a NEAT run.
+    p = neat.Population(config)
 
-# Add a stdout reporter to show progress in the terminal.
-p.add_reporter(neat.StdOutReporter(True))
-stats = neat.StatisticsReporter()
-p.add_reporter(stats)
-p.add_reporter(neat.Checkpointer(5))
+    # Add a stdout reporter to show progress in the terminal.
+    p.add_reporter(neat.StdOutReporter(True))
+    stats = neat.StatisticsReporter()
+    p.add_reporter(stats)
+    p.add_reporter(neat.Checkpointer(5))
 
-#p = neat.Checkpointer.restore_checkpoint('neat-checkpoint-164')
+    #p = neat.Checkpointer.restore_checkpoint('neat-checkpoint-164')
 
-# Run until a solution is found.
-winner = p.run(eval_genomes)
+    # Run until a solution is found.
+    pe = neat.ParallelEvaluator(4, eval_genome)
+    winner = p.run(pe.evaluate, 1000)
 
-# Display the winning genome.
-print('\nBest genome:\n{!s}'.format(winner))
+    # Display the winning genome.
+    print('\nBest genome:\n{!s}'.format(winner))
 
-# Show output of the most fit genome against training data.
-print('\nOutput:')
-winner_net = neat.nn.FeedForwardNetwork.create(winner, config)
-run_env(winner_net, render=True)
+    # Show output of the most fit genome against training data.
+    print('\nOutput:')
+    winner_net = neat.nn.FeedForwardNetwork.create(winner, config)
+    run_env(winner_net, render=True)
 
-visualize.draw_net(config, winner, True)
-visualize.plot_stats(stats, ylog=False, view=True)
-visualize.plot_species(stats, view=True)
+    visualize.draw_net(config, winner, True)
+    visualize.plot_stats(stats, ylog=False, view=True)
+    visualize.plot_species(stats, view=True)
 
+
+if __name__ == '__main__':
+    # Determine path to configuration file. This path manipulation is
+    # here so that the script will run successfully regardless of the
+    # current working directory.
+    local_dir = os.path.dirname(__file__)
+    config_path = os.path.join(local_dir, 'config')
+    run(config_path)
