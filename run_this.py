@@ -6,7 +6,9 @@ import gym
 import numpy as np
 import visualize
 import os
+import multiprocessing
 
+cpu_count = multiprocessing.cpu_count()
 
 env = gym.make('BipedalWalkerHardcore-v2')
 #env = gym.make('CartPole-v1')
@@ -59,7 +61,8 @@ def run (config_file):
     #p = neat.Checkpointer.restore_checkpoint('neat-checkpoint-164')
 
     # Run until a solution is found.
-    pe = neat.ParallelEvaluator(4, eval_genome)
+    pe = neat.ParallelEvaluator(cpu_count, eval_genome)
+    print("Starting evaluation on", cpu_count, "CPUs")
     winner = p.run(pe.evaluate, 1000)
 
     # Display the winning genome.
