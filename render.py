@@ -7,8 +7,8 @@ import numpy as np
 import visualize
 
 
-env = gym.make('BipedalWalker-v2')
-#env = gym.make('CartPole-v1')
+#env = gym.make('BipedalWalker-v2')
+env = gym.make('LunarLander-v2')
 
 def pick_action(obs, net):
     action = net.activate(obs)

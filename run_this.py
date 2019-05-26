@@ -7,15 +7,23 @@ import numpy as np
 import visualize
 import os
 import multiprocessing
+import pickle
 
 cpu_count = multiprocessing.cpu_count()
 
-env = gym.make('BipedalWalkerHardcore-v2')
+#env = gym.make('BipedalWalkerHardcore-v2')
 #env = gym.make('CartPole-v1')
+#env = gym.make('LunarLander-v2')
+env = gym.make('Humanoid-v3')
+
+def softmax(arr):
+    return np.exp(arr)/np.sum(np.exp(arr))
 
 def pick_action(obs, net):
     action = net.activate(obs)
     #action = 0 if action[0] < 0.5 else 1
+    #return np.clip(np.around(action),0,1).astype(int)
+    #return np.argmax(softmax(action))
     return action
 
 def run_env(net, render=False):
@@ -58,12 +66,19 @@ def run (config_file):
     p.add_reporter(stats)
     p.add_reporter(neat.Checkpointer(5))
 
+
     #p = neat.Checkpointer.restore_checkpoint('neat-checkpoint-164')
 
     # Run until a solution is found.
     pe = neat.ParallelEvaluator(cpu_count, eval_genome)
     print("Starting evaluation on", cpu_count, "CPUs")
-    winner = p.run(pe.evaluate, 1000)
+    winner = p.run(pe.evaluate,10000)
+    pickle.dump({"population":p,
+                 "best_genome":winner,
+                 "config":config,
+                 "stats":stats
+                 },
+                open("best_results.p", "wb"))
 
     # Display the winning genome.
     print('\nBest genome:\n{!s}'.format(winner))
@@ -71,11 +86,12 @@ def run (config_file):
     # Show output of the most fit genome against training data.
     print('\nOutput:')
     winner_net = neat.nn.FeedForwardNetwork.create(winner, config)
-    run_env(winner_net, render=True)
 
     visualize.draw_net(config, winner, True)
     visualize.plot_stats(stats, ylog=False, view=True)
     visualize.plot_species(stats, view=True)
+
+    run_env(winner_net, render=True)
 
 
 if __name__ == '__main__':
