@@ -3,6 +3,7 @@
 [bipedalgif]: pics/bipedalwalker.GIF
 [lunar]: https://media.giphy.com/media/ZgQ81302qPtBm0lEm0/giphy.gif
 [cartpole]: https://media.giphy.com/media/8Tzok9rsuq3ILmTExt/giphy.gif
+[mountaincar]: https://media.giphy.com/media/vbPqMfZ1egNxWNqZnL/giphy.gif
 
 
 # Automatic parallelized hyperparameter search with NEAT Reinforcement Learning using OpenAI Gym and Hyperopt
@@ -35,3 +36,4 @@ After 570  (just using the config file / w.o. hyperparameter search)
 
 ![bipedalanimation][bipedalgif]
 
+![mountaincar][mountaincar]
