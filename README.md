@@ -1,6 +1,9 @@
 [terminal]: pics/terminal.png
 [570gens]: pics/570gens.png
 [bipedalgif]: pics/bipedalwalker.GIF
+[lunar]: https://media.giphy.com/media/ZgQ81302qPtBm0lEm0/giphy.gif
+[cartpole]: https://media.giphy.com/media/8Tzok9rsuq3ILmTExt/giphy.gif
+
 
 # Automatic parallelized hyperparameter search with NEAT Reinforcement Learning using OpenAI Gym and Hyperopt
 Testing a hyperparameter search with parallelized implementation of the NEAT algorithm (NeuroEvolution of Augmenting Topologies) on some [OpenAI gym](https://gym.openai.com/) environments
@@ -26,4 +29,9 @@ If you want to just run the config file (and no search) you need to comment out 
 After 570  (just using the config file / w.o. hyperparameter search)
 ![570 generations later][570gens]
 
+![cp][cartpole]
+
+![lunar][lunar]
+
 ![bipedalanimation][bipedalgif]
+
